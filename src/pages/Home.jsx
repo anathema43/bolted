@@ -2,10 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { TruckIcon, BeakerIcon, HandRaisedIcon, StarIcon } from "@heroicons/react/24/outline";
 import AddToCartButton from "../components/AddToCartButton";
-import products from "../data/products";
+import { useProductStore } from "../store/productStore";
 import formatCurrency from "../utils/formatCurrency";
 
 export default function Home() {
+  const { products, fetchProducts, loading } = useProductStore();
+  
+  React.useEffect(() => {
+    if (products.length === 0) {
+      fetchProducts();
+    }
+  }, [products.length, fetchProducts]);
+  
   // Get featured products (first 4 products)
   const featuredProducts = products.slice(0, 4);
 
@@ -101,7 +109,12 @@ export default function Home() {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {featuredProducts.map((product, index) => (
+            {loading ? (
+              <div className="col-span-full flex justify-center py-12">
+                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-organic-primary"></div>
+              </div>
+            ) : (
+            featuredProducts.map((product, index) => (
               <div 
                 key={product.id} 
                 className="group bg-organic-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
@@ -162,7 +175,8 @@ export default function Home() {
                   <AddToCartButton product={product} className="w-full" />
                 </div>
               </div>
-            ))}
+            ))
+            )}
           </div>
         </div>
       </section>

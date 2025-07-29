@@ -23,16 +23,21 @@ const isFirebaseConfigured = Object.values(firebaseConfig).every(value =>
 
 if (!isFirebaseConfigured) {
   console.warn('⚠️ Firebase configuration is incomplete. Please check your .env file and ensure all VITE_FIREBASE_* variables are set.');
+  console.error('Firebase configuration is required. Please set up your environment variables.');
+  // Don't throw error in development to allow app to load
+  if (import.meta.env.PROD) {
+    throw new Error('Firebase configuration is required. Please set up your environment variables.');
+  }
 }
 
 // Initialize Firebase
-const app = isFirebaseConfigured ? initializeApp(firebaseConfig) : null;
+const app = initializeApp(firebaseConfig);
 
 // Initialize Firebase services
-export const auth = app ? getAuth(app) : null;
-export const db = app ? getFirestore(app) : null;
-export const storage = app ? getStorage(app) : null;
-export const functions = app ? getFunctions(app) : null;
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app);
+export const functions = getFunctions(app);
 
 // Enable offline persistence for Firestore
 import { enableNetwork, disableNetwork } from "firebase/firestore";
