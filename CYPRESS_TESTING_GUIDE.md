@@ -475,6 +475,21 @@ cy.get('[data-cy="element"]').then(($el) => {
 - **Security Tests**: 100%
 - **User Journeys**: 95%
 
+### **Unit Testing Integration**
+- **Utility Functions**: 100% coverage with Vitest
+- **Store Logic**: 95% coverage including real-time features
+- **Component Testing**: 85% coverage with React Testing Library
+- **Integration Testing**: 90% coverage with Cypress + Vitest
+### **✅ Image Optimization Testing:**
+1. **ResponsiveImage Component**
+   - Tests multiple image sizes
+   - Validates lazy loading implementation
+   - Tests error handling and fallbacks
+   - Validates srcSet and sizes attributes
+   - Tests performance impact
+
+## 🚀 **HOW TO RUN THE TESTS**
+
 ---
 
 ## 🎯 **Running Specific Test Suites**
@@ -495,6 +510,9 @@ npm run cy:run --spec "cypress/e2e/12-real-time-features.cy.js"
 
 # Test cart functionality
 npm run cy:run --spec "cypress/e2e/03-shopping-cart.cy.js"
+
+# Test cross-tab synchronization
+cy.testRealTimeSync()
 ```
 
 ### **Accessibility Testing**
