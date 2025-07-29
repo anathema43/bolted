@@ -1,17 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { onSnapshot } from 'firebase/firestore'
-import { useCartStore } from '../../store/cartStore'
-
-// Mock onSnapshot
-vi.mock('firebase/firestore', () => ({
-  onSnapshot: vi.fn(),
-  doc: vi.fn(),
-  getFirestore: vi.fn(),
-  collection: vi.fn(),
-}));
+import { useCartStore } from '../cartStore'
 
 // Mock Firebase
-vi.mock('../../firebase/firebase', () => ({
+vi.mock('../firebase/firebase', () => ({
   db: {}
 }))
 
@@ -22,7 +13,7 @@ vi.mock('firebase/firestore', () => ({
   onSnapshot: vi.fn()
 }))
 
-vi.mock('../../store/authStore', () => ({
+vi.mock('../authStore', () => ({
   useAuthStore: {
     getState: vi.fn(() => ({
       currentUser: { uid: 'test-user-123' }
@@ -191,5 +182,20 @@ describe('CartStore Real-time Synchronization', () => {
     
     expect(mockUnsubscribe).toHaveBeenCalled();
     expect(useCartStore.getState().unsubscribe).toBe(null);
+  });
+
+  it('should prevent duplicate subscriptions', () => {
+    const { onSnapshot } = require('firebase/firestore');
+    const mockUnsubscribe = vi.fn();
+    onSnapshot.mockReturnValue(mockUnsubscribe);
+    
+    const { subscribeToCart } = useCartStore.getState();
+    
+    // Subscribe twice
+    subscribeToCart();
+    subscribeToCart();
+    
+    // Should clean up previous subscription
+    expect(mockUnsubscribe).toHaveBeenCalled();
   });
 });
