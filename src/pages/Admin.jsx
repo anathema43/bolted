@@ -119,6 +119,7 @@ export default function Admin() {
       fetchProducts();
     }
   };
+
   const handleEdit = (product) => {
     setProductForm({
       ...product,
@@ -338,6 +339,7 @@ export default function Admin() {
                   placeholder="Product Name"
                   className="border rounded-lg p-3 focus:ring-2 focus:ring-organic-primary focus:border-transparent"
                   required
+                  data-cy="product-name"
                 />
                 <input
                   name="category"
@@ -347,6 +349,7 @@ export default function Admin() {
                   placeholder="Select or enter category"
                   className="border rounded-lg p-3 focus:ring-2 focus:ring-organic-primary focus:border-transparent"
                   required
+                  data-cy="product-category"
                 />
                 <datalist id="categories">
                   <option value="pickle">Pickles</option>
@@ -365,6 +368,7 @@ export default function Admin() {
                   placeholder="Price"
                   className="border rounded-lg p-3 focus:ring-2 focus:ring-organic-primary focus:border-transparent"
                   required
+                  data-cy="product-price"
                 />
                 <input
                   name="quantityAvailable"
@@ -375,6 +379,7 @@ export default function Admin() {
                   placeholder="Available Quantity"
                   className="border rounded-lg p-3 focus:ring-2 focus:ring-organic-primary focus:border-transparent"
                   required
+                  data-cy="product-quantity"
                 />
                 <input
                   name="sku"
@@ -396,7 +401,7 @@ export default function Admin() {
                     folder="ramro/products"
                   />
                   {imageUploadError && (
-                    <p className="mt-2 text-sm text-red-600">{imageUploadError}</p>
+                    <p className="mt-2 text-sm text-red-600" data-cy="file-type-error">{imageUploadError}</p>
                   )}
                 </div>
                 
@@ -408,10 +413,12 @@ export default function Admin() {
                   className="border rounded-lg p-3 col-span-1 md:col-span-2 focus:ring-2 focus:ring-organic-primary focus:border-transparent"
                   rows={3}
                   required
+                  data-cy="product-description"
                 />
                 <button
                   type="submit"
                   className="bg-organic-primary text-white px-6 py-3 rounded-lg hover:opacity-90 col-span-1 md:col-span-2 font-semibold"
+                  data-cy="save-product-button"
                 >
                   {isEdit ? "Update Product" : "Add Product"}
                 </button>
@@ -488,7 +495,7 @@ export default function Admin() {
         {activeTab === 'bulk-upload' && (
           <div className="space-y-8">
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-              <h2 className="text-xl font-semibold text-yellow-800 mb-2">
+              <h2 className="text-xl font-semibold text-yellow-800 mb-2" data-cy="bulk-upload-tab">
                 📦 Bulk Product Upload
               </h2>
               <p className="text-yellow-700">
