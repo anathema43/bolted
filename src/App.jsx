@@ -24,6 +24,7 @@ import AdminRoute from "./components/AdminRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { useAuthStore } from "./store/authStore";
 import { useCartStore } from "./store/cartStore";
+import { useWishlistStore } from "./store/wishlistStore";
 import LoadingSpinner from "./components/LoadingSpinner";
 
 function App() {
@@ -38,10 +39,8 @@ function App() {
       // Set up real-time listeners when user is authenticated
       const { currentUser } = useAuthStore.getState();
       if (currentUser) {
-        const { subscribeToCart } = useCartStore.getState();
         const { subscribeToWishlist } = useWishlistStore.getState();
         subscribeToCart();
-        subscribeToWishlist();
       }
       
       return () => unsub && unsub();
