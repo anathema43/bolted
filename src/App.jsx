@@ -19,27 +19,30 @@ import ShippingPolicy from "./pages/ShippingPolicy";
 import ReturnPolicy from "./pages/ReturnPolicy";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
+import ArtisansDirectory from "./pages/ArtisansDirectory";
+import ArtisanProfile from "./pages/ArtisanProfile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { useAuthStore } from "./store/authStore";
 import { useCartStore } from "./store/cartStore";
+import { useWishlistStore } from "./store/wishlistStore";
 import LoadingSpinner from "./components/LoadingSpinner";
 
 function App() {
   const { fetchUser, loading } = useAuthStore();
-  const { loadCart } = useCartStore();
+  const { loadCart, subscribeToCart } = useCartStore();
+  const { loadWishlist, subscribeToWishlist } = useWishlistStore();
   
   useEffect(() => {
     try {
       const unsub = fetchUser();
       loadCart();
+      loadWishlist();
       
       // Set up real-time listeners when user is authenticated
       const { currentUser } = useAuthStore.getState();
       if (currentUser) {
-        const { subscribeToCart } = useCartStore.getState();
-        const { subscribeToWishlist } = useWishlistStore.getState();
         subscribeToCart();
         subscribeToWishlist();
       }
@@ -48,7 +51,7 @@ function App() {
     } catch (error) {
       console.log("Auth not configured yet");
     }
-  }, [fetchUser, loadCart]);
+  }, [fetchUser, loadCart, loadWishlist, subscribeToCart, subscribeToWishlist]);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -76,6 +79,10 @@ function App() {
             <Route path="/faq" element={<FAQ />} />
             <Route path="/contact" element={<Contact />} />
             
+            {/* Artisan Routes */}
+            <Route path="/artisans" element={<ArtisansDirectory />} />
+            <Route path="/artisans/:id" element={<ArtisanProfile />} />
+            
             {/* Development Roadmap */}
             <Route path="/roadmap" element={<DevelopmentRoadmap />} />
             
@@ -96,9 +103,7 @@ function App() {
               </ProtectedRoute>
             } />
             <Route path="/wishlist" element={
-              <ProtectedRoute>
                 <Wishlist />
-              </ProtectedRoute>
             } />
             
             {/* Admin Routes */}

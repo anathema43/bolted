@@ -2,9 +2,9 @@
 
 ## 🔒 **SECURITY-FIRST TESTING APPROACH**
 This guide includes comprehensive testing for all implemented security fixes:
-- ✅ **Server-side Admin Verification** - Tests that admin access requires proper role in Firestore
+- ✅ **Firebase Server-side Admin Verification** - Tests that admin access requires proper role in Firestore
 - ✅ **File Upload Security** - Tests size limits and type validation
-- ✅ **Data Integrity** - Tests single source of truth from Firestore
+- ✅ **Data Integrity** - Tests single source of truth from Firebase Firestore
 - ✅ **Real-time Features** - Tests cross-tab cart/wishlist synchronization
 - ✅ **Input Validation** - Tests XSS and injection prevention
 
@@ -401,18 +401,22 @@ cy.logout();
 cy.navigateToShop();
 cy.navigateToCart();
 cy.navigateToAdmin();
+cy.navigateToArtisans();
 
 // Actions
 cy.addProductToCart('Product Name');
 cy.fillShippingInfo(shippingData);
 cy.selectPaymentMethod('razorpay');
 cy.createProduct(productData);
+cy.searchArtisans('search term');
+cy.filterArtisansByRegion('region');
 
 // Utilities
 cy.waitForPageLoad();
 cy.checkAccessibility();
 cy.setMobileViewport();
 cy.mockRazorpayPayment(true);
+cy.seedArtisanData();
 ```
 
 ---
