@@ -3,8 +3,6 @@ import { persist } from "zustand/middleware";
 import { doc, setDoc, getDoc, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useAuthStore } from "./authStore";
-import { businessLogicService } from "../services/businessLogicService";
-import { sessionValidationService } from "../services/sessionValidationService";
 
 export const useCartStore = create(
   persist(
@@ -148,9 +146,6 @@ export const useCartStore = create(
         
         set({ loading: true });
         try {
-          // Validate session before loading cart
-          await sessionValidationService.validateActiveSession(currentUser.uid);
-          
           const cartDoc = await getDoc(doc(db, "carts", currentUser.uid));
           if (cartDoc.exists()) {
             set({ cart: cartDoc.data().items || [], loading: false });
@@ -171,27 +166,24 @@ export const useCartStore = create(
         }
       },
 
-
-      addToCart: async (product, qty = 1) => {
+      saveCart: async () => {
         const { currentUser } = useAuthStore.getState();
+        const { cart } = get();
+        
         if (!currentUser) return;
         
         try {
-          // Use business logic service for cart operations
-          const updatedCart = await businessLogicService.addToCart(
-            currentUser.uid, 
-            product, 
-            qty
-          );
-          
-          set({ cart: updatedCart });
+          await setDoc(doc(db, "carts", currentUser.uid), {
+            items: cart,
+            updatedAt: new Date().toISOString()
+          });
         } catch (error) {
+          console.error("Error saving cart:", error);
           set({ error: error.message });
         }
       },
 
-      // Legacy method for backward compatibility
-      addToCartLocal: (product, qty = 1) => {
+      addToCart: (product, qty = 1) => {
         set((state) => {
           const exists = state.cart.find((item) => item.id === product.id);
           let newCart;
@@ -207,58 +199,35 @@ export const useCartStore = create(
             newCart = { cart: [...state.cart, { ...product, quantity: qty }] };
           }
           
+          // Save to Firestore (will trigger real-time update)
+          setTimeout(() => get().saveCart(), 100);
           return newCart;
         });
       },
 
-      updateQuantity: async (id, qty) => {
-        const { currentUser } = useAuthStore.getState();
-        if (!currentUser) return;
-        
+      updateQuantity: (id, qty) => {
         if (qty <= 0) {
-          await get().removeFromCart(id);
+          get().removeFromCart(id);
           return;
         }
-        
-        try {
-          const updatedCart = await businessLogicService.updateCartQuantity(
-            currentUser.uid,
-            id,
-            qty
-          );
-          
-          set({ cart: updatedCart });
-        } catch (error) {
-          set({ error: error.message });
-        }
+        set((state) => ({
+          cart: state.cart.map((item) =>
+            item.id === id ? { ...item, quantity: qty } : item
+          ),
+        }));
+        setTimeout(() => get().saveCart(), 100);
       },
 
-      removeFromCart: async (id) => {
-        const { currentUser } = useAuthStore.getState();
-        if (!currentUser) return;
-        
-        try {
-          const updatedCart = await businessLogicService.removeFromCart(
-            currentUser.uid,
-            id
-          );
-          
-          set({ cart: updatedCart });
-        } catch (error) {
-          set({ error: error.message });
-        }
+      removeFromCart: (id) => {
+        set((state) => ({
+          cart: state.cart.filter((item) => item.id !== id),
+        }));
+        setTimeout(() => get().saveCart(), 100);
       },
 
-      clearCart: async () => {
-        const { currentUser } = useAuthStore.getState();
-        if (!currentUser) return;
-        
-        try {
-          await businessLogicService.clearCart(currentUser.uid);
-          set({ cart: [] });
-        } catch (error) {
-          set({ error: error.message });
-        }
+      clearCart: () => {
+        set({ cart: [] });
+        setTimeout(() => get().saveCart(), 100);
       },
 
       getItemQuantity: (id) => {

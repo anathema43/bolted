@@ -9,38 +9,25 @@ import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Account from "./pages/Account";
+import Checkout from "./pages/Checkout";
+import Orders from "./pages/Orders";
 import Wishlist from "./pages/Wishlist";
+import Admin from "./pages/Admin";
 import About from "./pages/About";
+import DevelopmentRoadmap from "./pages/DevelopmentRoadmap";
 import ShippingPolicy from "./pages/ShippingPolicy";
 import ReturnPolicy from "./pages/ReturnPolicy";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
+import ArtisansDirectory from "./pages/ArtisansDirectory";
+import ArtisanProfile from "./pages/ArtisanProfile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
-import { 
-  AdminLazy,
-  OrdersLazy,
-  CheckoutLazy,
-  ArtisansDirectoryLazy,
-  ArtisanProfileLazy,
-  DevelopmentRoadmapLazy,
-  withLazyLoading,
-  preloadAdminComponents,
-  preloadCheckoutComponents
-} from "./components/LazyComponents";
 import { useAuthStore } from "./store/authStore";
 import { useCartStore } from "./store/cartStore";
 import { useWishlistStore } from "./store/wishlistStore";
 import LoadingSpinner from "./components/LoadingSpinner";
-
-// Create lazy-loaded components with loading fallbacks
-const Admin = withLazyLoading(AdminLazy);
-const Orders = withLazyLoading(OrdersLazy);
-const Checkout = withLazyLoading(CheckoutLazy);
-const ArtisansDirectory = withLazyLoading(ArtisansDirectoryLazy);
-const ArtisanProfile = withLazyLoading(ArtisanProfileLazy);
-const DevelopmentRoadmap = withLazyLoading(DevelopmentRoadmapLazy);
 
 function App() {
   const { fetchUser, loading } = useAuthStore();
@@ -58,12 +45,6 @@ function App() {
       if (currentUser) {
         subscribeToCart();
         subscribeToWishlist();
-        
-        // Preload components based on user role
-        const { userProfile } = useAuthStore.getState();
-        if (userProfile?.role === 'admin') {
-          preloadAdminComponents();
-        }
       }
       
       return () => unsub && unsub();
@@ -72,13 +53,6 @@ function App() {
     }
   }, [fetchUser, loadCart, loadWishlist, subscribeToCart, subscribeToWishlist]);
 
-  // Preload checkout when cart has items
-  const { cart } = useCartStore();
-  useEffect(() => {
-    if (cart.length > 0) {
-      preloadCheckoutComponents();
-    }
-  }, [cart.length]);
   if (loading) {
     return <LoadingSpinner />;
   }

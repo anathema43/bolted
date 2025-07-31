@@ -30,16 +30,13 @@
 
 ### **Step 1: Verify Dependencies**
 ```bash
-# Check Node.js version (should be 18+ for React 18 compatibility)
+# Check Node.js version (should be 18+)
 node --version
 
 # Check npm version
 npm --version
 
-# Check Node.js version compatibility
-node --version  # Should be 18.x or higher
-
-# Verify all packages are installed
+# Verify all dependencies are installed
 npm list --depth=0
 
 # Check for security vulnerabilities
