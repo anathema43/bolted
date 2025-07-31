@@ -617,6 +617,45 @@ You now have a fully functional, production-ready e-commerce platform with:
 
 **Your Ramro e-commerce platform is ready to connect customers with authentic Himalayan craftsmanship!** 🏔️
 
+## 🔄 **Automated Dependency Management**
+
+### **Dependabot Configuration**
+The project includes automated dependency management via GitHub Dependabot:
+
+#### **Features**:
+- ✅ **Weekly Updates**: Scheduled every Monday
+- ✅ **Security Scanning**: Automatic vulnerability detection
+- ✅ **Grouped Updates**: Related packages updated together
+- ✅ **Auto-merge**: Safe updates merged automatically
+- ✅ **Manual Review**: Major updates flagged for review
+
+#### **Update Categories**:
+1. **React Ecosystem**: React, React DOM, related packages
+2. **Testing**: Vitest, Cypress, Testing Library
+3. **Build Tools**: Vite, ESLint, Tailwind CSS
+4. **Firebase**: All Firebase-related packages
+5. **GitHub Actions**: Workflow dependencies
+
+#### **Security Measures**:
+- Major version updates blocked for critical dependencies
+- All updates validated by automated test suite
+- Security vulnerabilities prioritized for immediate review
+- Failed updates require manual intervention
+
+### **Monitoring Dependency Health**:
+```bash
+# Check dependency status
+npm outdated
+
+# Security audit
+npm audit
+
+# View Dependabot PRs
+# Go to GitHub repository → Pull requests → Filter by "dependabot"
+```
+
+For complete dependency management procedures, refer to [`docs/DEPENDENCY_MANAGEMENT.md`](docs/DEPENDENCY_MANAGEMENT.md).
+
 ---
 
 *This setup guide provides everything needed to deploy a production-ready e-commerce platform. For ongoing support, refer to the service documentation links provided throughout this guide.*

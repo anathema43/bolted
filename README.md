@@ -237,6 +237,44 @@ npm install -g firebase-tools@latest
    ```
 
 Your Ramro e-commerce application will be fully set up with enterprise-grade security and ready for development and testing!
+
+## 🔄 **Automated Dependency Management**
+
+### **Dependabot Integration**
+This project uses GitHub Dependabot for automated dependency updates:
+
+- ✅ **Weekly Updates**: Every Monday at 9:00 AM IST
+- ✅ **Security Priority**: Vulnerability fixes fast-tracked
+- ✅ **Automated Testing**: All updates validated by CI pipeline
+- ✅ **Smart Grouping**: Related dependencies updated together
+- ✅ **Auto-merge**: Safe updates merged automatically
+
+### **Dependency Update Process**:
+1. **Dependabot creates PRs** for dependency updates
+2. **Automated testing** validates the updates
+3. **Safe updates auto-merge** (patch versions, dev dependencies)
+4. **Major updates require manual review**
+5. **Security updates prioritized** for immediate attention
+
+### **Managing Dependency Updates**:
+```bash
+# Check for outdated dependencies
+npm outdated
+
+# Update specific dependency
+npm update package-name
+
+# Security audit
+npm audit
+npm audit fix
+
+# After Dependabot updates
+git pull origin main
+npm install
+npm run test
+```
+
+For detailed dependency management procedures, see [`docs/DEPENDENCY_MANAGEMENT.md`](docs/DEPENDENCY_MANAGEMENT.md).
 ---
 
 ## 📚 **Project Documentation**
