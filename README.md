@@ -63,7 +63,7 @@ After installation, verify everything works:
 
 ### **1. Check Dependencies**
 ```bash
-# Verify all packages are installed
+# Check Node.js version (should be 18+ for React 18 compatibility)
 npm list --depth=0
 
 # Check for vulnerabilities
@@ -139,7 +139,7 @@ npm install -g firebase-tools@latest
 
 1. **Node Version Compatibility**
    ```bash
-   # Check Node version (should be 18+)
+   # Check Node version (should be 18+ for React 18 compatibility)
    node --version
    
    # Update Node if needed
@@ -278,6 +278,7 @@ This project is comprehensively documented. Below is a guide to the key document
 - **Image Optimization**: Responsive images with lazy loading
 - **Accessibility**: WCAG 2.1 AA compliance
 - **Strategic Dashboard**: Dynamic roadmap visualization from markdown documents
+- **Enterprise CI/CD**: Automated testing, security scanning, and deployment
 
 ### **⚠️ Remaining for Production**:
 - **Payment Backend**: Razorpay API endpoints (4-6 hours)
