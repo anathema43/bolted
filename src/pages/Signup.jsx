@@ -10,14 +10,11 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [err, setErr] = useState("");
   const navigate = useNavigate();
+  const location = useLocation(); // Keep this declaration
 
   async function handleSignup(e) {
     e.preventDefault();
     setErr("");
-    if (password.length < 6) {
-      setErr("Password must be at least 6 characters.");
-      return;
-    }
     try {
       await signup(email, password, name);
       
@@ -25,6 +22,8 @@ export default function Signup() {
       const savedRedirectPath = getAndClearRedirectPath();
       
       // Navigate to redirect path or home (new users don't get admin access immediately)
+      const latestUserProfile = useAuthStore.getState().userProfile;
+      const targetPath = determineRedirectPath(latestUserProfile, savedRedirectPath);
       if (savedRedirectPath) {
         navigate(savedRedirectPath);
       } else {
