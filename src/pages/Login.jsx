@@ -1,27 +1,34 @@
 // src/pages/Login.jsx
 
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
+import { getAndClearRedirectPath, determineRedirectPath } from "../utils/redirectUtils";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuthStore();
+  const { login, userProfile } = useAuthStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     try {
       await login(email, password);
-      navigate("/account");
-    } catch (err) {
-      setError("Invalid email or password.");
+      
+      // Get and clear the saved redirect path
+      const savedRedirectPath = getAndClearRedirectPath();
+      
+      // Determine where to redirect based on user role and saved path
+      const targetPath = determineRedirectPath(userProfile, savedRedirectPath);
+      
+      navigate(targetPath);
+    } catch (error) {
+      setError(error.message || "Login failed. Please try again.");
     }
-  };
-
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-himalaya-light">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
