@@ -1,8 +1,8 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import LoadingSpinner from './LoadingSpinner';
 import { saveRedirectPath } from '../utils/redirectUtils';
+import { Navigate } from 'react-router-dom';
 
 export default function ProtectedRoute({ children }) {
   const { currentUser, loading } = useAuthStore();
@@ -12,10 +12,7 @@ export default function ProtectedRoute({ children }) {
   }
 
   if (!currentUser) {
-    // Save the current path to redirect back after login
-    saveRedirectPath(location.pathname);
-    return <Navigate to="/login" replace />;
+    saveRedirectPath(window.location.pathname);
+    return React.createElement(Navigate, { to: "/login", replace: true });
   }
-
-  return children;
 }
